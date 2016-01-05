@@ -3,9 +3,10 @@
 This repository is for materials related to a two-day short course titled **Introduction to lithospheric geodynamic modelling** held prior to the [32nd Nordic Geological Winter Meeting](http://www.geologinenseura.fi/winter_meeting/ ) on the 11-12th of January, 2016.
 The materials include lecture slides, source code for course exercises and a wiki page with links to course software and related web resources.
 
-### Tentative schedule
-**Day 1** - Monday, January 11
+All materials in this repository are licensed under [The MIT License (MIT)](https://github.com/HUGG/NGWM2016-modelling-course/blob/master/LICENSE ).
 
+Day 1 - Monday, January 11
+---
 09:00-09:45 - General course introduction and practical matters (**DW**)<br/>
 09:45-10:30 - Physics of heat transfer (**DW**)
 
@@ -25,8 +26,8 @@ The materials include lecture slides, source code for course exercises and a wik
 15:45-16:30 - cont.	+ applications to heat eq. and/or flow mech. (**LK**)<br/>
 16:30-17:00 - Time for tinkering<br/>
 
-**Day 2** - Tuesday, January 12
-
+Day 2 - Tuesday, January 12
+---
 09:00-09:45 - Rheology of the lithosphere (**DW**)<br/>
 09:45-10:30 - Introduction to Gale (**LK**)
 
@@ -45,5 +46,3 @@ The materials include lecture slides, source code for course exercises and a wik
 15:00-15:45 - Running a rifting experiment (DW&LK)<br/>
 15:45-16:30 - cont.<br/>
 16:30-17:00 - Final comparisons, closing remarks and what to do next (DW&**LK**)
-
-All materials in this repository are licensed under [The MIT License (MIT)](https://github.com/HUGG/NGWM2016-modelling-course/blob/master/LICENSE ).
