@@ -4,4 +4,4 @@ This repository is for materials related to a two-day short course titled **Intr
 The materials include lecture slides, source code for course exercises and a wiki page with linksto course software and related web resources.
 
 
-All materials in this repository are licensed under the [The MIT License (MIT)](https://github.com/HUGG/NGWM2016-modelling-course/blob/master/LICENSE ).
+All materials in this repository are licensed under [The MIT License (MIT)](https://github.com/HUGG/NGWM2016-modelling-course/blob/master/LICENSE ).
