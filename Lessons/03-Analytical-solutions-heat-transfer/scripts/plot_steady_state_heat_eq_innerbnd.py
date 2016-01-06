@@ -9,9 +9,9 @@ import sys
 #    * Constant heat conductivity
 #    * Constant heat production
 #
-# Choosable boundary conditions
-#  - Fixed surface temperature
-#  - Bottom heat flux or bottom temperature defined
+# Choosable Dirichlet + von Neumann boundary conditions
+#  T=T0 at z=z1
+#  q=q0 at z=z2
 
 
 ###### Start configurable parameters ######
@@ -20,22 +20,18 @@ import sys
 k = 2.5
 
 # Define heat production rate, W/m^3
-H = 2.0e-6
+H = 1.11e-6 #1.8e-6
 
-# Choose type of bottom boundary condition
-bottom_bnd_cond_type = "vonneumann"  # can be "vonneumann" or "dirichlet"
-
-### Define value of the bottom boundary condition
-# For von Neumann: Define bottom heat flow, W/m^2
-qb = 20e-3
-# For Dirichlet: Define bottom boundary temperature, deg C
-Tbott = 600.0
-
-# Define surface temperature
-Tsurf = 20.0
+### Define boundary condition value
+# location and value of boundary condition one (von neumann)
+z1 = 0.0 #40000.0
+q0 = 60.0e-3 #15e-3
+# location and value of boundary condition two (dirichlet)
+z2 = 0.0
+T0 = 0 #20.0
 
 # Define height of the model, meters
-L = 30000.0
+L = 40000.0
 
 # Define the x-axis limits of the plot
 xlimits = (0.0, 1000.0)
@@ -50,17 +46,8 @@ N = 100 # num of points we use for plotting
 z = np.linspace(0, L, N)
 
 # Calculate integration constants
-if bottom_bnd_cond_type == "vonneumann":
-  Ca = qb + H*L
-  Cb = -k*Tsurf
-elif bottom_bnd_cond_type == "dirichlet":
-  Ca = (k*Tbott + 0.5*H*L**2 - k*Tsurf) / L
-  Cb = Tsurf*k
-else:
-  print("Invalid bottom boundary condition type " + bottom_bnd_cond_type)
-  print("Adjust parameter bottom_bnd_cond_type")
-  dummy = raw_input("Press enter to quit")
-  sys.exit(1)
+Ca = q0 + H*z1
+Cb = -q0 * z2 - H*z1*z2 + k*T0 + 0.5*H*z2**2
 
 ### Evaluate temperature at chosen range
 T = (- 0.5 * H * z**2 + Ca*z + Cb) / k

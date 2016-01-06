@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 #    * No advection
 #    * Constant heat conductivity
 #    * Constant heat production
+#
+# Fixed boundary conditions
+# T=20 at z=0
+# T=600 at z=30km
 
 ### Plot the geotherm
 
