@@ -7,6 +7,10 @@ import matplotlib.pyplot as plt
 #    * No advection
 #    * Constant heat conductivity
 #    * Constant heat production
+#
+# Fixed boundary conditions
+# T=20 at z=0
+# q=qb at z=30km
 
 ### Plot the geotherm
 
@@ -17,7 +21,7 @@ k = 2.5
 H = 2.0e-6
 
 # Define bottom heat flow, W/m^2
-q = 20e-3
+qb = 20e-3
 
 # Define surface temperature
 Tsurf = 20.0
@@ -30,10 +34,10 @@ xlimits = (0.0, 1000.0)
 z = np.linspace(0, 30000, 100)
 
 # Evaluate temperature at chosen range
-T = q*z/k + 30000.0 * H*z/k + Tsurf - 0.5*H*z**2 / k
+T = qb*z/k + 30000.0 * H*z/k + Tsurf - 0.5*H*z**2 / k
 
 # Generate line to plot the temperature gradient (dT/dz = q/k) at the bottom boundary
-Tbot_grad = [T[99], T[99] - q*10000.0/k]
+Tbot_grad = [T[99], T[99] - qb*10000.0/k]
 zbot_grad = [-z[99], -z[99] + 10000.0]
 
 # Plot the geotherm
