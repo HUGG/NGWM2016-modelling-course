@@ -16,7 +16,7 @@ Day 1 - Monday, January 11
 
 12:15-13:15 - *LUNCH BREAK*
 
-13:15-14:45 - Basic fluid mechanics + analytical solutions for simple cases and limitations
+13:15-14:45 - Basic fluid mechanics + analytical solutions for simple cases and their limitations
 
 14:45-15:00 - *COFFEE/TEA BREAK*
 
