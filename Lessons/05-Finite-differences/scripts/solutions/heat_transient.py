@@ -8,7 +8,7 @@ z_bott = 50e3 # location of bottom boundary
 
 nz = 11        # number of grid points
 nt = 8        # number of timesteps to calculate
-dt = 6250000000000.0 # timestep to use, in seconds
+dt = 4*6250000000000.0 # timestep to use, in seconds
 
 T_surf = 0.0   # temperature of the upper surface
 T_bott = 600.0 # temperature of the lower boundary
@@ -44,23 +44,24 @@ T = np.zeros((nt, nz))
 
 
 # Set initial condition, T=0 everywhere except at boundaries
-j = 0 # i.e. initial time step
-T[j, 0] = T_surf             # time step zero, grid point zero, T=T_surf
-T[j, nz-1] = T_bott          # time step zero, last grid point, T=T_bott
-for i in range(1, nz-1):     
-  T[j, i] = 0.0              # time step zero, grid point i, T=0
+T[0, 0] = T_surf
+T[0, nz-1] = T_bott
+for i in range(1, nz-1):
+  T[0, i] = 0.0
 
-time = 0  # Variable to calculate the model time in the time loop
+time = 0
 
 # Loop over time steps, skipping the first one (=initial condition)
 for j in range(1,nt):
   time = time + dt
   
   # Set boundary condition
-  ???? # set the required boundary conditions for this time step
+  T[j, 0] = T_surf
+  T[j, nz-1] = T_bott
 
   # Calculate temperature at inner grid points
-  ????
+  for i in range(1, nz-1):
+    T[j, i] = ( (k/(rho*Cp)) * (T[j-1, i+1] - 2.0*T[j-1, i] + T[j-1, i-1]) / dz**2 )  *  dt   +   T[j-1, i]
 
   if j % plot_every == 0:
     # Print and plot the depth vs temperature during this timestep

@@ -39,14 +39,13 @@ T = np.zeros(nz)
 # Set boundary conditions, i.e. the upper surface temperature
 # and the temperature at one grid point below
 T[0] = T_surf
-T[1] = ????    # calculate T[1] based on heat flow at surface, 
-               # heat conductivity value, and T[0]
+T[1] = q_surf * dz / k + T[0]
 
 
 # Calculate temperature values inside the model
 for i in range(2, nz):   # NB! Grid points 0 and 1 omitted
                          # as they cannot be calculated
-  T[i] = ????  # use finite difference formula to calculate the values for the inner grid points
+  T[i] = -A * dz**2 / k - T[i-2] + 2*T[i-1]
 
 
 # Print and plot the depth vs temperature

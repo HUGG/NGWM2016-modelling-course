@@ -39,7 +39,7 @@ T[0] = T_surf
 # Calculate temperature values inside the model
 for i in range(1, nz):   # NB! Grid point 0 omitted
                          # as it cannot be calculated
-  T[i] = ????
+  T[i] = (q / k) * (z[i] - z[i-1]) + T[i-1]
 
 
 # Print and plot the depth vs temperature
