@@ -11,7 +11,7 @@ dwhipp 01.16
 #--- User-defined input variables
 hl = 100.0                                                                     # Thickness of lithosphere [km]
 h = 200.0                                                                      # Thickness of asthenosphere [km]
-u0 = 15.0                                                                       # Lithospheric plate velocity [cm/a]
+u0 = 15.0                                                                      # Lithospheric plate velocity [cm/a]
 numpts = 101                                                                   # Number of points to calculate velocity across channel
 #--- End user-defined input
 
@@ -43,11 +43,11 @@ plt.figure()
 # Make plot
 plt.plot(u,y,'ko-')
 
-# Add text label with maximum counterflow velocity
-plt.text(????)
-
 # Invert y axis
 plt.gca().invert_yaxis()
+
+# Add text label with thickness of lithospheric plate
+plt.text(????)
 
 # Label axes and add title
 plt.xlabel("Flow velocity [mm/a]")
