@@ -20,7 +20,7 @@ import sys
 k = 2.5
 
 # Define heat production rate, W/m^3
-H = 1.11e-6 #1.8e-6
+A = 1.11e-6 #1.8e-6
 
 ### Define boundary condition value
 # location and value of boundary condition one (von neumann)
@@ -46,11 +46,11 @@ N = 100 # num of points we use for plotting
 z = np.linspace(0, L, N)
 
 # Calculate integration constants
-Ca = q0 + H*z1
-Cb = -q0 * z2 - H*z1*z2 + k*T0 + 0.5*H*z2**2
+Ca = q0 + A*z1
+Cb = -q0 * z2 - A*z1*z2 + k*T0 + 0.5*A*z2**2
 
 ### Evaluate temperature at chosen range
-T = (- 0.5 * H * z**2 + Ca*z + Cb) / k
+T = (- 0.5 * A * z**2 + Ca*z + Cb) / k
 
 # Generate line to plot the temperature gradient (dT/dz = q/k) at the bottom boundary
 Tbot_grad = [T[N-1], T[N-1] - ( k*(T[N-1]-T[N-2])/(z[N-1]-z[N-2]) )*(L/3.0)/k]

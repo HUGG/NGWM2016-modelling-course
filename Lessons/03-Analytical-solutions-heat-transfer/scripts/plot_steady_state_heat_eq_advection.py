@@ -18,9 +18,6 @@ import sys
 # Define heat conductivity, W/mK
 k = 2.5
 
-# Define volumetric heat production rate, W/m^3
-A = 0
-
 # Define advection velocity, m/s
 # NB! z axis points down, so negative velocity points up
 uz = 5 / (1000 * 60 * 60 * 24 * 365.25)   # scaled from mm/a   
@@ -54,7 +51,6 @@ z = np.linspace(0, L, N)
 
 # Calculate integration constants
 ### Evaluate temperature at chosen range
-#T = Tbott * (1-np.exp(-uz*z/kappa)) / (1-np.exp(-uz*L/kappa))
 T = Tbott * (np.exp(z*uz/kappa)-1) / (np.exp(L*uz/kappa)-1)
 
 # Generate line to plot the temperature gradient (dT/dz = q/k) at the bottom boundary

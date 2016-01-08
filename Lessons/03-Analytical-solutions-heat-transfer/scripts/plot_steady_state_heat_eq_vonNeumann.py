@@ -18,7 +18,7 @@ import matplotlib.pyplot as plt
 k = 2.5
 
 # Define heat production rate, W/m^3
-H = 2.0e-6
+A = 2.0e-6
 
 # Define bottom heat flow, W/m^2
 qb = 20e-3
@@ -34,7 +34,7 @@ xlimits = (0.0, 1000.0)
 z = np.linspace(0, 30000, 100)
 
 # Evaluate temperature at chosen range
-T = qb*z/k + 30000.0 * H*z/k + Tsurf - 0.5*H*z**2 / k
+T = qb*z/k + 30000.0 * A*z/k + Tsurf - 0.5*A*z**2 / k
 
 # Generate line to plot the temperature gradient (dT/dz = q/k) at the bottom boundary
 Tbot_grad = [T[99], T[99] - qb*10000.0/k]

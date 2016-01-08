@@ -1,5 +1,6 @@
 import numpy as np
 import matplotlib.pyplot as plt
+from analytical_solutions import *
 
 # Finite difference code to solve the steady state geotherm
 # given the boundary condition T=T_surf and the surface
@@ -37,27 +38,27 @@ T = np.zeros(nz)
 
 
 # Set boundary conditions, i.e. the upper surface temperature
+# and the temperature at one grid point below
 T[0] = T_surf
-
-## Grid point one needs special handling as T[-1] is not available
-# Calculate "ghost point" outside the model domain, where grid point -1 
-# would be, assuming surface heat flow q_surf
-Tghost = T[0] - q_surf * dz / k  # = "T[-1]"
-# Use the same finite difference formula to calculate T as for 
-# the inner points, but replace "T[-1]" by ghost point value
-T[1] = -A * dz**2 / k - Tghost + 2*T[0]
+T[1] = q_surf * dz / k + T[0]
 
 # Calculate temperature values inside the model
 for i in range(2, nz):   # NB! Grid points 0 and 1 omitted
   T[i] = -A * dz**2 / k - T[i-2] + 2*T[i-1]
 
 
+# Calculate analytical solution
+T_analytical = analytical_ss_qT(z, k, A, z_surf, q_surf, z_surf, T_surf)
+
+
 # Print and plot the depth vs temperature
 print("Temperature values are:")
 print(T)
-plt.plot(T, -z, "o-b")  # minus sign is placed to make z axis point down
+plt.plot(T, -z, "o-b", label="FD")  # minus sign is placed to make z axis point down
+plt.plot(T_analytical, -z, "o-r", label="Analytical")
 plt.xlabel("Temperature")
 plt.ylabel("Depth")
+plt.legend()
 plt.show()
 
 

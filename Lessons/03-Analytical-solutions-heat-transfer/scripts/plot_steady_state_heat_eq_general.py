@@ -20,7 +20,7 @@ import sys
 k = 2.5
 
 # Define heat production rate, W/m^3
-H = 2.0e-6
+A = 2.0e-6
 
 # Choose type of bottom boundary condition
 bottom_bnd_cond_type = "vonneumann"  # can be "vonneumann" or "dirichlet"
@@ -51,10 +51,10 @@ z = np.linspace(0, L, N)
 
 # Calculate integration constants
 if bottom_bnd_cond_type == "vonneumann":
-  Ca = qb + H*L
+  Ca = qb + A*L
   Cb = -k*Tsurf
 elif bottom_bnd_cond_type == "dirichlet":
-  Ca = (k*Tbott + 0.5*H*L**2 - k*Tsurf) / L
+  Ca = (k*Tbott + 0.5*A*L**2 - k*Tsurf) / L
   Cb = Tsurf*k
 else:
   print("Invalid bottom boundary condition type " + bottom_bnd_cond_type)
@@ -63,7 +63,7 @@ else:
   sys.exit(1)
 
 ### Evaluate temperature at chosen range
-T = (- 0.5 * H * z**2 + Ca*z + Cb) / k
+T = (- 0.5 * A * z**2 + Ca*z + Cb) / k
 
 # Generate line to plot the temperature gradient (dT/dz = q/k) at the bottom boundary
 Tbot_grad = [T[N-1], T[N-1] - ( k*(T[N-1]-T[N-2])/(z[N-1]-z[N-2]) )*(L/3.0)/k]
