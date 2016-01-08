@@ -52,7 +52,14 @@ T = np.zeros(nz)
 # Set boundary conditions, i.e. the upper surface temperature
 # and the temperature at one grid point below
 T[0] = T_surf
-T[1] = q_surf * dz / k + T[0]
+
+## Grid point one needs special handling as T[-1] is not available
+# Calculate "ghost point" outside the model domain, where grid point -1 
+# would be, assuming surface heat flow q_surf
+Tghost = T[0] - q_surf * dz / k  # = "T[-1]"
+# Use the same finite difference formula to calculate T as for 
+# the inner points, but replace "T[-1]" by ghost point value
+T[1] = -A[1] * dz**2 / k - Tghost + 2*T[0]
 
 
 # Calculate temperature values inside the model
