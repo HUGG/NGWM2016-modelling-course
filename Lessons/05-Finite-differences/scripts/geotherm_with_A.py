@@ -37,22 +37,25 @@ T = np.zeros(nz)
 
 
 # Set boundary conditions, i.e. the upper surface temperature
-# and the temperature at one grid point below
 T[0] = T_surf
-T[1] = ????    # calculate T[1] based on heat flow at surface, 
-               # heat conductivity value, and T[0]
 
+## Grid point one needs special handling as T[-1] is not available
+# Calculate "ghost point" outside the model domain, where grid point -1 
+# would be, assuming surface heat flow q_surf
+Tghost = T[0] - q_surf * dz / k  # = "T[-1]"
+# Use the same finite difference formula to calculate T as for 
+# the inner points, but replace "T[-1]" by ghost point value
+T[1] = ????
 
 # Calculate temperature values inside the model
 for i in range(2, nz):   # NB! Grid points 0 and 1 omitted
-                         # as they cannot be calculated
-  T[i] = ????  # use finite difference formula to calculate the values for the inner grid points
+  T[i] = ????
 
 
 # Print and plot the depth vs temperature
 print("Temperature values are:")
 print(T)
-plt.plot(T, -z, "o-")   # minus sign is placed to make z axis point down
+plt.plot(T, -z, "o-b")  # minus sign is placed to make z axis point down
 plt.xlabel("Temperature")
 plt.ylabel("Depth")
 plt.show()
