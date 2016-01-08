@@ -41,7 +41,7 @@ u = u * 1000.0 * 365.25 * 24.0 * 3600.0
 plt.figure()
 
 # Make plot
-plt.plot(u,y)
+plt.plot(u,y,'ko-')
 
 # Invert y axis
 plt.gca().invert_yaxis()
