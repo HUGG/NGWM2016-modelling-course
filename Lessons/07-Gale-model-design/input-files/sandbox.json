@@ -1,0 +1,262 @@
+
+// REFERENCE VISCOSITY 10^21
+// SEE MANUAL 2.2.8.3 FOR SCALING
+
+{
+    "EulerDeform":    // This structure is needed for the mesh (grid) to be allowed to deform,
+                      // including the upper surface
+    {
+        "systems": [
+            {
+                "mesh": "v-mesh",                
+                "p-mesh": "p-mesh",               
+                "remesher": "velocityRemesher",    
+                "velocityField": "VelocityField",  
+                "wrapTop": "True"          // makes top bnd able to move
+                //"staticBottom": "True"
+                // "staticRight": "True"   // would make right bnd immobile
+            }
+        ]
+    },
+    "components":
+    {
+        "buoyancyForceTerm":             // adds buoyancy as an body force in stokes equation
+        {
+            "Type": "BuoyancyForceTerm",
+            "ForceVector": "mom_force",
+            "Swarm": "gaussSwarm",
+            "gravity": "9.81",
+            "damping": "False"
+            // Defining TemperatureField would enable thermal expansion
+        },
+ 
+        // Following sections define the "shapes", or regions where material properties will be applied,
+        // and the material properties. Keyword 'type' tells which kind of component is being described
+
+        "backgroundShape":              // name of the shape
+        {
+            "Type": "EquationShape",    // Tells that this is a shape which is described by an equation
+            "equation": "1"             // Equation of form f=f(x,y). If f==1, shape is enabled at location (x,y)
+        },
+        "sdShape":
+        {
+            "Type": "Box",              // Shape that has a form of a box
+            "startX": "minX",
+            "endX": "maxX",
+            "startY": "30000",
+            "endY": "35000",
+            "startZ": "minZ",
+            "endZ": "maxZ"
+        },
+        "lcShape":
+        {
+            "Type": "Box",              // Shape that has a form of a box
+            "startX": "minX",
+            "endX": "maxX",
+            "startY": "0",
+            "endY": "10000",
+            "startZ": "minZ",
+            "endZ": "maxZ"
+        },
+        "ucShape":
+        {
+            "Type": "Box",
+            "startX": "minX",
+            "endX": "maxX",
+            "startY": "10000",
+            "endY": "30000",
+            "startZ": "minZ",
+            "endZ": "maxZ"
+        },
+        "crViscosity":
+        {
+            "Type": "MaterialViscosity",    // Define a viscosity description that can be later assigned to a material
+            "eta0": "1.0e4"
+        },
+        "sdViscosity":
+        {
+            "Type": "MaterialViscosity",
+            "eta0": "1.0e4"
+        },
+        "strainWeakening":
+        {
+            "Type": "StrainWeakening",             // A description of strain weakening process
+            "TimeIntegrator": "timeIntegrator",
+            "MaterialPointsSwarm": "materialSwarm",
+            "initialSofteningStrain": "0.5",
+            "finalSofteningStrain": "1.0",
+            "initialDamageFraction": "0.0",
+            "initialDamageWavenumber": "0.5",
+            "initialDamageFactor": "0.5",
+            "healingRate": "0.0"
+        },
+        "ucYielding":                               // A description of a plasticity
+        {
+            "Type": "DruckerPrager",
+            "PressureField": "PressureField",
+            "VelocityGradientsField": "VelocityGradientsField",
+            "MaterialPointsSwarm": "materialSwarm",
+            "Context": "context",
+            "StrainWeakening": "strainWeakening",
+            "StrainRateField": "StrainRateField",
+            "cohesion": "31.0e6",
+            "cohesionAfterSoftening": "1e6",
+            "frictionCoefficient": "0.5760",
+            "frictionCoefficientAfterSoftening": "0.3490",
+            "minimumViscosity": "minimumViscosity",
+            "maxStrainRate": "maxStrainRate"
+        },
+        "sdYielding":
+        {
+            "Type": "DruckerPrager",
+            "PressureField": "PressureField",
+            "VelocityGradientsField": "VelocityGradientsField",
+            "MaterialPointsSwarm": "materialSwarm",
+            "Context": "context",
+            "StrainWeakening": "strainWeakening",
+            "StrainRateField": "StrainRateField",
+            "cohesion": "20.0e6",
+            "cohesionAfterSoftening": "0.5e6",
+            "frictionCoefficient": "0.2618",
+            "frictionCoefficientAfterSoftening": "0.1571",
+            "minimumViscosity": "minimumViscosity",
+            "maxStrainRate": "maxStrainRate"
+        },
+        "upperCrust":
+        {
+            "Type": "RheologyMaterial",         // Define a material
+            "Shape": "ucShape",              // Assign it to described shapes
+            "density": "2800.0",
+            "Rheology": [                       // Assign rheological properties for this material
+                "crViscosity",
+                "ucYielding",
+                "storeViscosity",               // store* are instructions to store some values in the model results file
+                "storeStress"
+            ]
+        },
+        "lowerCrust":
+        {
+            "Type": "RheologyMaterial",         // Define a material
+            "Shape": "lcShape",              // Assign it to described shapes
+            "density": "2900.0",
+            "Rheology": [                       // Assign rheological properties for this material
+                "crViscosity",
+                "storeViscosity",               // store* are instructions to store some values in the model results file
+                "storeStress"
+            ]
+        },
+        "sediment":                                 // Define another material ...
+        {
+            "Type": "RheologyMaterial",
+            "Shape": "sdShape",               // ... assigned to another shape
+            "density": "2700.0",
+            "Rheology": [
+                "sdViscosity",
+                "sdYielding",
+                "storeViscosity",
+                "storeStress"
+            ]
+        }
+
+    },
+
+    // Following section describes the velocity boundary conditions of the model
+    // "Coordinates":   (nb! front and back exist also in 2D models)
+    //
+    //      top  back             
+    //        | /                 
+    //        |/                  
+    //   _____|______right        
+    //left   /|                   
+    //      / |                   
+    //     /  |                   
+    // front  bottom              
+
+    "velocityBCs" :{
+        "type": "CompositeVC",
+        "vcList": [
+            {
+                "type": "WallVC",
+                "wall": "front",
+                "variables": [
+                    {
+                        "name": "vz",
+                        "value": "0.0"
+                    }
+                ]
+            },
+            {
+                "type": "WallVC",
+                "wall": "back",
+                "variables": [
+                    {
+                        "name": "vz",
+                        "value": "0.0"
+                    }
+                ]
+            },
+            {
+                "type": "WallVC",
+                "wall": "left",
+                "variables": [
+                    {
+                        "name": "vx",
+                        "value": "0.0"
+                    }
+                ]
+            },
+            {
+                "type": "WallVC",
+                "wall": "right",
+                "variables": [
+                    {
+                        "name": "vx",                    // Defining velocity makes the boundary itself move. See Manual section A.5.2 for immobile flux boundaries.
+                        "value": "-3.17e11"
+                    }
+                ]
+            },
+            {
+                "type": "WallVC",
+                "wall": "bottom",
+                "variables": [
+                    {
+                        "name": "vy",
+                        "value": "0.0"
+                    }
+                ]
+            }
+        ]
+    },
+
+    "FieldVariablesToCheckpoint": [    // Which variables (field) are to be outputted to result files
+        "StrainRateInvariantField",
+        "VelocityField",
+        "PressureField"
+    ],
+    "timeIntegratorOrder": "1",         
+    "maxTimeSteps": "5000",              // How many time steps to calculate
+    "outputPath": "./output.sandbox",    // To which folder output is written
+    "dim": "2",                          // Spatial dimensions of the problem
+    "minX": "0",                         // Physical extents of the model
+    "minY": "0",
+    "minZ": "0",
+    "maxX": "500000",
+    "maxY": "35000",
+    "maxZ": "1",
+    "nx": "128",
+    "ny": "32",
+    "nz": "8",
+    "particlesPerCell": "40",           // Number of particles for marker-in-cell method
+    "seed": "13",
+    "checkpointEvery": "1",             // How often (in terms of timesteps) to write the output
+    "linearTolerance": "1e-7",         
+    "nonLinearTolerance": "1e-3",       
+    "maxUzawaIterations": "5000",
+    "minimumViscosity": "1e-2",         // Overall, forced, minimum viscosity of the model
+    "maxStrainRate": "1e7"              // Overall, forced, maximum strain rate of the model
+,
+     "journal.info": "True",
+     "journal.debug": "True",
+     "journal-level.info": "1",
+     "journal-level.debug": "1"
+}
