@@ -24,11 +24,11 @@ A = 1.11e-6 #1.8e-6
 
 ### Define boundary condition value
 # location and value of boundary condition one (von neumann)
-z1 = 0.0 #40000.0
-q0 = 60.0e-3 #15e-3
+z1 = 40000.0
+q0 = 15e-3
 # location and value of boundary condition two (dirichlet)
 z2 = 0.0
-T0 = 0 #20.0
+T0 = 20.0
 
 # Define height of the model, meters
 L = 40000.0
