@@ -1,20 +1,54 @@
 import os
+import re
 
-VER = "20160105_01"
+
+def timeStepExists(istep, outpath):
+    for file in os.listdir(outpath):
+        if file.endswith(".%05d.vtk" % istep):
+            return True
+    return False
+
+def listTimeSteps(path):
+    files = []
+    tsteps = []
+    for file in os.listdir(path):
+        ret = re.search('XDMF\.([0-9]{1,})\.xmf$', file)
+        if ret is not None:
+            files.append(file)
+            tsteps.append(int(ret.group(1)))
+    return files, tsteps
+
+
+VER = "20160110_01"
+
+reprocessExistingModels = False
 
 pathToModels = os.environ['VISIT_EXPORT_INDIR']
 modelname = os.environ['VISIT_EXPORT_MODELNAME']
 
 fullPath = os.path.join(pathToModels, modelname)
-pathToDatabase = os.path.join(fullPath, "XDMF.*.xmf")
-pathToDatabase = pathToDatabase + " database"
 
-OpenDatabase(pathToDatabase)
-md = GetMetaData(pathToDatabase)
+outfiles, outtsteps = listTimeSteps(fullPath)
 
-for istep in range(TimeSliderGetNStates()):
-    print istep
-    SetTimeSliderState(istep)
+nsteps = len(outtsteps)
+print " *** Processing %d timesteps ..." % nsteps
+
+outtsteps_sorted = [val for val in outtsteps]
+outtsteps_sorted.sort()
+
+rets = 0
+
+for istep in outtsteps_sorted:
+    i = outtsteps.index(istep)
+    ifile = os.path.join(fullPath, outfiles[i])
+    if (not reprocessExistingModels) and timeStepExists(istep, fullPath):
+        print " *** Skipping! " + str(istep)
+        continue
+    print " *** Processing timestep %05d ..." % istep
+    OpenComputeEngine()
+    OpenDatabase(ifile)
+    SetPipelineCachingMode(0)
+    md = GetMetaData(ifile)
 
     for imesh in range(md.GetNumMeshes()):
         meshname = md.GetMeshes(imesh).name
@@ -44,10 +78,17 @@ for istep in range(TimeSliderGetNStates()):
             continue
         dbAtts = ExportDBAttributes()
         dbAtts.db_type = "VTK"
-        dbAtts.filename = os.path.join(modelname, meshname + ".%04d" % istep)
+        dbAtts.filename = os.path.join(modelname, meshname + ".%05d" % istep)
         dbAtts.variables = tuple(exportVariables)
-        ExportDatabase(dbAtts)
+        ret = ExportDatabase(dbAtts)
+        if ret == 0:
+            rets = rets + 1
         DeleteAllPlots()
+    CloseDatabase(ifile)
+    CloseComputeEngine()
 
-dummy = raw_input("Everything looks good. Press Enter to quit.")
+Close()
+if rets > 0:
+    print " *** Some errors occurred: " + str(rets)
+dummy = raw_input("Press Enter to quit.")
 quit()
