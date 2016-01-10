@@ -46,7 +46,7 @@
         "cratonCrustShape":
         {
             "Type": "Box",
-            "startX": "250000",
+            "startX": "350000",
             "endX": "maxX",
             "startY": "50000",
             "endY": "100000",
@@ -57,7 +57,7 @@
         {
             "Type": "Box",
             "startX": "minX",
-            "endX": "250000",
+            "endX": "350000",
             "startY": "65000",
             "endY": "100000",
             "startZ": "minZ",
@@ -80,7 +80,7 @@
         "tectonCrustViscosity":
         {
             "Type": "MaterialViscosity",    // Define a viscosity description that can be later assigned to a material
-            "eta0": "1.0e4"
+            "eta0": "1.0e5"
         },
         "cratonCrustViscosity":
         {
@@ -219,7 +219,7 @@
                 "variables": [
                     {
                         "name": "vx",                    // Defining velocity makes the boundary itself move. See Manual section A.5.2 for immobile flux boundaries.
-                        "value": "-3.17e11"
+                        "value": "-31.7e11"  // 3.17e11 == 1mm/a (eta_ref=1e21)
                     }
                 ]
             },

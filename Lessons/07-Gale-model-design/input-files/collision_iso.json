@@ -46,7 +46,7 @@
         "cratonCrustShape":
         {
             "Type": "Box",
-            "startX": "250000",
+            "startX": "350000",
             "endX": "maxX",
             "startY": "50000",
             "endY": "100000",
@@ -57,7 +57,7 @@
         {
             "Type": "Box",
             "startX": "minX",
-            "endX": "250000",
+            "endX": "350000",
             "startY": "65000",
             "endY": "100000",
             "startZ": "minZ",
@@ -80,7 +80,7 @@
         "tectonCrustViscosity":
         {
             "Type": "MaterialViscosity",    // Define a viscosity description that can be later assigned to a material
-            "eta0": "1.0e4"
+            "eta0": "1.0e5"
         },
         "cratonCrustViscosity":
         {
@@ -171,7 +171,7 @@
             "Type": "StressBC",
             "ForceVector": "mom_force",
             "wall": "bottom",
-            "normal_value": "9.81 * (x < 250000-t*0.5*3.17e11 ? 2800*35000 + 3200*65000 : 2800*50000 + 3200*50000) * (100000-y) / 100000"
+            "normal_value": "9.81 * (x < 350000-t*(350000.0/500000.0)*31.7e11 ? 2800*35000 + 3200*65000 : 2800*50000 + 3200*50000) * (100000-y) / 100000"
         }
     },
 
@@ -238,7 +238,7 @@
                 "variables": [
                     {
                         "name": "vx",                    // Defining velocity makes the boundary itself move. See Manual section A.5.2 for immobile flux boundaries.
-                        "value": "-3.17e11"
+                        "value": "-31.7e11"
                     },
                     {
                         "name": "vy",
@@ -255,7 +255,7 @@
         "PressureField"
     ],
     "timeIntegratorOrder": "1",         
-    "maxTimeSteps": "5000",              // How many time steps to calculate
+    "maxTimeSteps": "200",              // How many time steps to calculate
     "outputPath": "./output.collisionIso",  // To which folder output is written
     "dim": "2",                          // Spatial dimensions of the problem
     "minX": "0",                         // Physical extents of the model
