@@ -48,7 +48,7 @@
             "Type": "Box",
             "startX": "250000",
             "endX": "maxX",
-            "startY": "50000",
+            "startY": "65000",
             "endY": "100000",
             "startZ": "minZ",
             "endZ": "maxZ"
@@ -255,8 +255,8 @@
         "PressureField"
     ],
     "timeIntegratorOrder": "1",         
-    "maxTimeSteps": "5000",              // How many time steps to calculate
-    "outputPath": "./output.collision",  // To which folder output is written
+    "maxTimeSteps": "1000",              // How many time steps to calculate
+    "outputPath": "./output.collisionHires",  // To which folder output is written
     "dim": "2",                          // Spatial dimensions of the problem
     "minX": "0",                         // Physical extents of the model
     "minY": "0",
@@ -264,8 +264,8 @@
     "maxX": "500000",
     "maxY": "100000",
     "maxZ": "1",
-    "nx": "96",
-    "ny": "24", 
+    "nx": "160",
+    "ny": "40", 
     "nz": "8",
     "particlesPerCell": "40",           // Number of particles for marker-in-cell method
     "seed": "13",
