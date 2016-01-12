@@ -238,11 +238,11 @@
                 "variables": [
                     {
                         "name": "vy",
-                        "value": "x > 200000 ? ( x < 300000 ? -15.85e11 : 0.0 ) : 0.0"
+                        "value": "x > 232500 ? ( x < 267500 ? -37.1e11 : 0.0 ) : 0.0"
                     },
                     {
                         "name": "vx",
-                        "value": "x > 300000 ? -31.7e11 : 0.0"
+                        "value": "x > 232500 ? -31.7e11 : 0.0"
                     }
                 ]
             }
@@ -255,7 +255,7 @@
         "PressureField"
     ],
     "timeIntegratorOrder": "1",         
-    "maxTimeSteps": "1000",              // How many time steps to calculate
+    "maxTimeSteps": "500",              // How many time steps to calculate
     "outputPath": "./output.collisionHires",  // To which folder output is written
     "dim": "2",                          // Spatial dimensions of the problem
     "minX": "0",                         // Physical extents of the model
