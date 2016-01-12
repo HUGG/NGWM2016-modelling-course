@@ -35,10 +35,10 @@
 
         "backgroundMantleShape":
         {
-            "Type": "Box",
-            "startX": "minX",
-            "endX": "maxX",
-            "startY": "minY",
+            "Type": "Box",            // Shape in form of a box
+            "startX": "minX",         // startX = left bnd in X-dir, endY = right bnd in Y-dir etc
+            "endX": "maxX",           // min/max X/Y refer to whole model boundaries
+            "startY": "minY",           
             "endY": "maxY",
             "startZ": "minZ",
             "endZ": "maxZ"
@@ -65,21 +65,24 @@
         },
         "mantleShape":
         {
-            "Type": "Intersection",
-            "shapes": [
-                "backgroundMantleShape",
-                "!cratonCrustShape",
-                "!tectonCrustShape"
+            "Type": "Intersection",        // Shape formed from existing shapes
+            "shapes": [                    // Form a shape ...
+                "backgroundMantleShape",   // ... from this shape, from which shapes
+                "!cratonCrustShape",       // cratonCrustShape and tectonCrustShape have been cut out
+                "!tectonCrustShape"     
+                                           // In the final model we will only use mantleShape, cratonCrustShape, 
+                                           // and tectonCrustShape, but not the backgroundMantleShape. 
+                                           // backgroundMantleShape was only used to create mantleShape
             ]
         },
-        "mantleViscosity":
+        "mantleViscosity":                 // Define a viscosity description that can be later assigned to a material
         {
             "Type": "MaterialViscosity",
             "eta0": "1.0e2"
         },
         "tectonCrustViscosity":
         {
-            "Type": "MaterialViscosity",    // Define a viscosity description that can be later assigned to a material
+            "Type": "MaterialViscosity",    
             "eta0": "1.0e5"
         },
         "cratonCrustViscosity":
@@ -87,18 +90,18 @@
             "Type": "MaterialViscosity",
             "eta0": "1.0e5"
         },
-        "tectonCrustYielding":
+        "tectonCrustYielding":             // Define a plasicity that can be later assigned to a material
         {
-            "Type": "DruckerPrager",
+            "Type": "DruckerPrager",       // In 2D Drucker-Prager == Mohr-Coulomb
             "PressureField": "PressureField",
             "VelocityGradientsField": "VelocityGradientsField",
             "MaterialPointsSwarm": "materialSwarm",
             "Context": "context",
             "StrainWeakening": "strainWeakening",
             "StrainRateField": "StrainRateField",
-            "cohesion": "20.0e6",
+            "cohesion": "20.0e6",          // NB. Cohesion has units Pa -- no need to scale
             "cohesionAfterSoftening": "2e6",
-            "frictionCoefficient": "0.2618",
+            "frictionCoefficient": "0.2618",   // NB. In radians, no need to scale
             "frictionCoefficientAfterSoftening": "0.0262",
             "minimumViscosity": "minimumViscosity",
             "maxStrainRate": "maxStrainRate"
@@ -121,8 +124,8 @@
         },
         "strainWeakening":
         {
-            "Type": "StrainWeakening",             // A description of strain weakening process
-            "TimeIntegrator": "timeIntegrator",
+            "Type": "StrainWeakening",             // A description of strain weakening process assigned
+            "TimeIntegrator": "timeIntegrator",    // to plasticity descriptions
             "MaterialPointsSwarm": "materialSwarm",
             "initialSofteningStrain": "0.5",
             "finalSofteningStrain": "1.0",
@@ -134,7 +137,7 @@
         "tectonCrust":
         {
             "Type": "RheologyMaterial",         // Define a material
-            "Shape": "tectonCrustShape",              // Assign it to described shapes
+            "Shape": "tectonCrustShape",        // Assign it to previously described shapes
             "density": "2800.0",
             "Rheology": [                       // Assign rheological properties for this material
                 "tectonCrustViscosity",
@@ -145,24 +148,24 @@
         },
         "cratonCrust":
         {
-            "Type": "RheologyMaterial",         // Define a material
-            "Shape": "cratonCrustShape",              // Assign it to described shapes
+            "Type": "RheologyMaterial",         
+            "Shape": "cratonCrustShape",      
             "density": "2800.0",
-            "Rheology": [                       // Assign rheological properties for this material
+            "Rheology": [           
                 "cratonCrustViscosity",
                 "cratonCrustYielding",
-                "storeViscosity",               // store* are instructions to store some values in the model results file
+                "storeViscosity",           
                 "storeStress"
             ]
         },
         "mantle":
         {
-            "Type": "RheologyMaterial",         // Define a material
-            "Shape": "mantleShape",              // Assign it to described shapes
+            "Type": "RheologyMaterial",      
+            "Shape": "mantleShape",          
             "density": "3200.0",
-            "Rheology": [                       // Assign rheological properties for this material
+            "Rheology": [                  
                 "mantleViscosity",
-                "storeViscosity",               // store* are instructions to store some values in the model results file
+                "storeViscosity",    
                 "storeStress"
             ]
         }
@@ -215,14 +218,14 @@
             },
             {
                 "type": "WallVC",
-                "wall": "right",
+                "wall": "right",             // right boundary, i.e. x=maxX
                 "variables": [
                     {
-                        "name": "vx",                    // Defining velocity makes the boundary itself move. See Manual section A.5.2 for immobile flux boundaries.
-                        "value": "-31.7e11"  // 3.17e11 == 1mm/a (eta_ref=1e21)
+                        "name": "vx",        // Defining velocity makes the boundary itself move. See Manual section A.5.2 for immobile flux boundaries.
+                        "value": "-31.7e11"  // 3.17e10 == 1mm/a (eta_ref=1e21)
                     },
                     {
-                        "name": "vy",
+                        "name": "vy",        // No-slip boundary condition in y-direction
                         "value": "0.0"
                     }
                 ]
@@ -230,15 +233,14 @@
             {
                 "type": "WallVC",
                 "wall": "bottom",
-                // We want free-slip bottom boundary except for the outflow location
-                // Outflow flux has to match the inflow flux of the mantle at x=xmax boundary.
-                // Inflow at right is h_mantle * vx = 50000 * (-31.7e11), "hole" at the bottom,
-                // i.e. subducting lithosphere thickness is 100 km, so vertical velocity vy is 
-                // 50000/100000 * (-31.7e11). 
+                // Outflow mass flux has to match the inflow flux of the mantle at x=xmax boundary.
                 "variables": [
                     {
                         "name": "vy",
-                        "value": "x > 232500 ? ( x < 267500 ? -37.1e11 : 0.0 ) : 0.0"
+                        "value": "x > 232500 ? ( x < 267500 ? -31.7e11 : 0.0 ) : 0.0"
+                        // Syntax:    CONDITION  ?  IF-TRUE  : IF-FALSE
+                        // e.g.  "x > 100000  ?  0.0  :  5.0" would assign value zero everywhere
+                        // x > 100000, and value 5.0 everywhere else
                     },
                     {
                         "name": "vx",
@@ -264,7 +266,7 @@
     "maxX": "500000",
     "maxY": "100000",
     "maxZ": "1",
-    "nx": "96",
+    "nx": "96",                         // Resolution: Number of elements in x and y direction
     "ny": "24", 
     "nz": "8",
     "particlesPerCell": "40",           // Number of particles for marker-in-cell method
