@@ -19,6 +19,6 @@ if not exist "%VISIT_EXPORT_MODELNAME%" (
   set /p VISIT_EXPORT_MODELNAME="Give model name: "
   goto WHILE_MODEL
 )
-echo Running convertsion ...
+echo Running conversion ...
 %PATH_TO_VISIT% -cli -nowin -s ./exportDB.py
 set VISIT_EXPORT_MODELNAME=%TMP_STORE_VAL%
