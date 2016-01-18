@@ -219,7 +219,7 @@
                 "variables": [
                     {
                         "name": "vx",                    // Defining velocity makes the boundary itself move. See Manual section A.5.2 for immobile flux boundaries.
-                        "value": "-31.7e11"  // 3.17e11 == 1mm/a (eta_ref=1e21)
+                        "value": "-31.7e11"  // 3.17e10 == 1mm/a (eta_ref=1e21)
                     },
                     {
                         "name": "vy",
@@ -238,7 +238,7 @@
                 "variables": [
                     {
                         "name": "vy",
-                        "value": "x > 232500 ? ( x < 267500 ? -37.1e11 : 0.0 ) : 0.0"
+                        "value": "x > 232500 ? ( x < 267500 ? -31.7e11 : 0.0 ) : 0.0"
                     },
                     {
                         "name": "vx",
