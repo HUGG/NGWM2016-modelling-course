@@ -1,0 +1,18 @@
+Use these files to convert .h5 output of Gale to individual .vtk files that can be read by ParaView.
+
+Files:
+  - exportDB.bat     Script file to do the conversion in Windows
+  - exportDB.sh      Bash script to do the conversion in Linux/Unix
+  - exportDB-Mac.sh  Bash script to do the conversion in Mac OS
+  - exportDB.py      Python script to be run within VisIt
+  
+Instructions:
+  1) Copy exportDB.py and one of the script files to the directory where you have 
+     the Gale output directories
+  2) In Windows and Linux/Unix, modify the script and check that the variable PATH_TO_VISIT
+     points to the location where you have installed VisIt.
+  3) Run the script and give the name of the model (output directory) you want to convert
+  
+URLs:
+  VisIt can be downloaded here: https://visit.llnl.gov/
+  
